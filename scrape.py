@@ -2,21 +2,19 @@ from requests import request
 from bs4 import BeautifulSoup
 import json
 
-
 def scrape_link(link):
     url: str = link
     domain = url.split(".com")[0] + ".com"
-    path = url.split(".com")[1]
 
-    json_file: str = "shpalljet.json"
+    json_file: str = "jobs.json"
     data: list = []
 
-    resp = request("GET", domain + path)
+    resp = request("GET", url)
 
     if resp.status_code == 200:
         bs = BeautifulSoup(resp.text, "html.parser")
         links = bs.find_all("a", {"class": "JobSearchCard-primary-heading-link"})
-        for link in links:
+        for link in links[0:2]:
             link_response = request("GET", domain + link["href"])
             if link_response.status_code == 200:
                 lbs = BeautifulSoup(link_response.text, "html.parser")
@@ -31,6 +29,13 @@ def scrape_link(link):
                     price = price.text
                 else:
                     price = 0
+
+                job_link = domain + link["href"]
+
+                if job_link is not None:
+                    job_link = domain + link["href"]
+                else:
+                    job_link = ""
 
                 description = lbs.select_one(
                     "body > app-root > app-logged-out-shell > div > app-project-view > app-project-view-logged-out > fl-container > fl-container > app-project-view-logged-out-main > div:nth-child(2) > fl-text.Project-description > div"
@@ -112,6 +117,7 @@ def scrape_link(link):
                 data.append(
                     {
                         "title": title,
+                        "job_link": job_link,
                         "description": description,
                         "price": price,
                         "clientFlag": clientFlag,
