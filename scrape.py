@@ -14,7 +14,7 @@ def scrape_link(link):
     if resp.status_code == 200:
         bs = BeautifulSoup(resp.text, "html.parser")
         links = bs.find_all("a", {"class": "JobSearchCard-primary-heading-link"})
-        for link in links[0:2]:
+        for link in links:
             link_response = request("GET", domain + link["href"])
             if link_response.status_code == 200:
                 lbs = BeautifulSoup(link_response.text, "html.parser")
