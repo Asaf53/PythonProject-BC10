@@ -106,13 +106,13 @@ def scrape_link(link):
                 else:
                     work_type = ""
 
-                propesals = lbs.select_one(
+                proposals = lbs.select_one(
                     "body > app-root > app-logged-out-shell > div > app-project-view > app-project-view-logged-out > fl-container > fl-container > app-project-view-logged-out-main > div:nth-child(2) > app-project-view-logged-out-about > fl-grid > fl-col:nth-child(1) > fl-text > div"
                 )
-                if propesals is not None:
-                    propesals = propesals.text
+                if proposals is not None:
+                    proposals = proposals.text
                 else:
-                    propesals = ""
+                    proposals = ""
 
                 data.append(
                     {
@@ -125,7 +125,7 @@ def scrape_link(link):
                         "category": category,
                         "deadline": deadline,
                         "work_type": work_type,
-                        "propesals": propesals,
+                        "proposals": proposals,
                         "project_id": project_id,
                     }
                 )
